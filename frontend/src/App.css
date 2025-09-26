@@ -1,0 +1,163 @@
+/* App.css */
+body {
+  background-color: #f8f9fa;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.list-group-item {
+  border-left: none;
+  border-right: none;
+  padding: 1.2rem;
+  transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+  background-color: #f8f9fa;
+}
+
+.list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.btn-group .btn {
+  border-radius: 5px;
+  margin-left: 5px;
+}
+
+.input-group-text {
+  background-color: white;
+}
+
+.modal-content {
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.modal-header {
+  border-radius: 10px 10px 0 0;
+}
+
+.fas {
+  width: 1.2em;
+}
+
+.shadow-sm {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+#contactForm {
+  position: sticky;
+  top: 20px;
+}
+
+@media (max-width: 992px) {
+  #contactForm {
+    position: static;
+    margin-bottom: 2rem;
+  }
+}
+
+/* Dark mode styles */
+.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+.dark-mode .card {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+.dark-mode .list-group-item {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border-color: #333;
+}
+
+.dark-mode .table {
+  color: #ffffff;
+}
+
+.dark-mode .table-hover tbody tr:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.075);
+}
+
+.dark-mode .form-control {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  border-color: #444;
+}
+
+.dark-mode .form-control:focus {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  border-color: #4361ee;
+  box-shadow: 0 0 0 0.2rem rgba(67, 97, 238, 0.25);
+}
+
+.dark-mode .input-group-text {
+  background-color: #333;
+  color: #ffffff;
+  border-color: #444;
+}
+
+/* Avatar circles */
+.avatar-circle-sm {
+  width: 35px;
+  height: 35px;
+  min-width: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+/* Highlight search results */
+mark {
+  background-color: yellow;
+  color: black;
+  padding: 0;
+}
+
+.dark-mode mark {
+  background-color: #ffeb3b;
+  color: black;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .card-header .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
+  
+  .card-header .input-group {
+    width: 100% !important;
+    margin-top: 10px;
+  }
+  
+  .card-header .btn-group {
+    margin-top: 10px;
+  }
+}
