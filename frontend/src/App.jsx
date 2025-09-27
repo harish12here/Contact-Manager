@@ -46,7 +46,7 @@ function App() {
   const [filterTag, setFilterTag] = useState("all");
   const [availableTags, setAvailableTags] = useState(["Family", "Friends", "Work", "Other"]);
   const [newTag, setNewTag] = useState("");
-  const backendUrl = "http://localhost:8000/";
+  const backendUrl = import.meta.env.VITE_API_URL;
   const [userId, setUserId] = useState(null);
 
   // Toggle dark mode
