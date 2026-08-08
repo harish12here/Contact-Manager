@@ -46,7 +46,8 @@ function App() {
   const [filterTag, setFilterTag] = useState("all");
   const [availableTags, setAvailableTags] = useState(["Family", "Friends", "Work", "Other"]);
   const [newTag, setNewTag] = useState("");
-  const backendUrl = import.meta.env.VITE_API_URL;
+  const rawBackendUrl = import.meta.env.VITE_API_URL || "http://localhost:8000/";
+  const backendUrl = rawBackendUrl.endsWith("/") ? rawBackendUrl : rawBackendUrl + "/";
   const [userId, setUserId] = useState(null);
 
   // Toggle dark mode
@@ -58,44 +59,49 @@ function App() {
     }
   }, [darkMode]);
 
-  // Mock login function
+  // Login function
   const handleLogin = async (e) => {
-    console.log("Login Btn Clicked");
-    
     e.preventDefault();
     setAuthError("");
+    setAuthSuccess("");
     
     if (!loginForm.username || !loginForm.password) {
-      setAuthError("Please enter both username and password");
+      setAuthError("Please enter both email/username and password");
       return;
     }
 
     try {
-      const response  = await axios.post(backendUrl + "auth/login", {
-        mail: loginForm.username,
+      const response = await axios.post(backendUrl + "auth/login", {
+        mail: loginForm.username.trim(),
         password: loginForm.password
       });
-      if(response.status === 200){  
+      if (response.status === 200) {  
         setIsLoggedIn(true);
         setAuthSuccess(response.data.message);
         setUserId(response.data.userId);
-        setFormData({...formData, userId: response.data.userId});
+        setFormData(prev => ({ ...prev, userId: response.data.userId }));
         setTimeout(() => setAuthSuccess(""), 3000);
       } else {
-        console.log(response.data);
         setAuthError(response.data.message || "Login failed");
       }
     } catch (error) {
-      console.log(error.response ? error.response.data : error.message);
-      setAuthError("Login failed");
+      console.error("Login error:", error);
+      if (error.response) {
+        setAuthError(error.response.data.message || "Login failed");
+      } else if (error.request) {
+        setAuthError("Cannot connect to backend server. Make sure the backend server is running on port 8000.");
+      } else {
+        setAuthError(error.message || "Login failed");
+      }
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setAuthError("");
+    setAuthSuccess("");
     
-    if (!registerForm.username || !registerForm.password) {
+    if (!registerForm.username || !registerForm.mail || !registerForm.password) {
       setAuthError("Please fill all fields");
       return;
     }
@@ -107,24 +113,23 @@ function App() {
     
     try {
       const response = await axios.post(backendUrl + "auth/signup", {
-        name : registerForm.username,
+        name: registerForm.username,
         mail: registerForm.mail,
         password: registerForm.password
       });
       if (response.status === 201) {
         setAuthSuccess(response.data.message);
-        setTimeout(() => setAuthSuccess(""), 3000);
+        setTimeout(() => {
+          setAuthSuccess("");
+          setAuthMode("login");
+        }, 2000);
       } else {
         setAuthError(response.data.message || "Registration failed");
       }
     } catch (error) {
-      setAuthError("Registration failed");
+      console.log(error.response ? error.response.data : error.message);
+      setAuthError(error.response?.data?.message || "Registration failed");
     }
-
-    setTimeout(() => {
-      setAuthSuccess("");
-      setAuthMode("login");
-    }, 3000);
   };
 
   const handleLogout = () => {
@@ -380,12 +385,12 @@ function App() {
                 {authMode === "login" && (
                   <form onSubmit={handleLogin}>
                     <div className="mb-3">
-                      <label htmlFor="username" className="form-label">Username</label>
+                      <label htmlFor="username" className="form-label">Email / Username</label>
                       <input
                         type="text"
                         className="form-control"
                         id="username"
-                        placeholder="Enter your Email"
+                        placeholder="Enter your Email or Username"
                         value={loginForm.username}
                         onChange={(e) => setLoginForm({...loginForm, username: e.target.value})}
                         required
